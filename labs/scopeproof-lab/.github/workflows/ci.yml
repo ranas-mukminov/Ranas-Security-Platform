@@ -1,0 +1,28 @@
+name: Offline security lab CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-and-demo:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Offline unit tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Execute synthetic laboratory
+        run: |
+          PYTHONPATH=src python -m scopeproof demo --out artifacts/synthetic-ci
+          PYTHONPATH=src python -m scopeproof verify --events artifacts/synthetic-ci/events.jsonl
+          grep -q 'LAB ONLY / NO EXTERNAL SYSTEMS TESTED' artifacts/synthetic-ci/report.md
