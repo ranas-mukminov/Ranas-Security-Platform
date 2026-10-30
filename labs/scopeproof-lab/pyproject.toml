@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scopeproof-lab"
+version = "0.1.0"
+description = "Offline reproducible security lab with fail-closed scope policy and evidence chain"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{name = "Run_as_daemon"}]
+license = {text = "MIT"}
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Security",
+  "Development Status :: 3 - Alpha",
+]
+
+[project.scripts]
+scopeproof = "scopeproof.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+scopeproof = ["fixtures/*.json"]

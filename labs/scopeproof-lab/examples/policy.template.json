@@ -1,0 +1,13 @@
+{
+  "engagement_id": "SYNTHETIC-LOCAL-LAB",
+  "authorization_reference": "SELF-OWNED-SYNTHETIC-LAB-ONLY",
+  "lab_only": true,
+  "target_hosts": ["127.0.0.1", "localhost"],
+  "source_cidrs": ["127.0.0.1/32"],
+  "ports": [8080],
+  "methods": ["synthetic_authz", "rbac_review"],
+  "starts_at": "2026-01-01T00:00:00+00:00",
+  "ends_at": "2030-01-01T00:00:00+00:00",
+  "max_actions": 4,
+  "stopped": false
+}

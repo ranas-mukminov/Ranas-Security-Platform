@@ -1,0 +1,38 @@
+name: ScopeProof Lab v0.1
+
+on:
+  push:
+    paths:
+      - "labs/scopeproof-lab/**"
+      - ".github/workflows/scopeproof-lab.yml"
+  pull_request:
+    paths:
+      - "labs/scopeproof-lab/**"
+      - ".github/workflows/scopeproof-lab.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    defaults:
+      run:
+        working-directory: labs/scopeproof-lab
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Python unit tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Synthetic laboratory and chain verification
+        run: |
+          PYTHONPATH=src python -m scopeproof demo --out artifacts/ci
+          PYTHONPATH=src python -m scopeproof verify --events artifacts/ci/events.jsonl
+          grep -q 'LAB ONLY / NO EXTERNAL SYSTEMS TESTED' artifacts/ci/report.md
