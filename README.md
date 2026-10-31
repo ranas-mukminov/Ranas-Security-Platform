@@ -55,6 +55,25 @@ graph TB
 | RU-Compliance-Toolkit | Russian compliance automation (152-FZ, KII) | ✅ Active | [Repository](https://github.com/ranas-mukminov/152fz-compliance-as-code) |
 | Secure-K3s-GitOps-Template | Production-ready K3s template | ✅ Active | [Access Request](https://run-as-daemon.dev/enterprise) |
 
+## Red-team lab portfolio (lab, not production)
+
+The following repositories are lab and methodology work, not
+production products. They are public so their scope and limits can
+be checked. Nothing here is a client engagement, a real disclosure,
+or a production runtime.
+
+| Repository | What it is | Status |
+|------------|------------|--------|
+| [RedTeam-Engagement-Kit](https://github.com/ranas-mukminov/RedTeam-Engagement-Kit) | Authorised-engagement methodology: scope, rules of engagement, report templates, plus a filled lab-engagement example | Lab / methodology, no exploit code |
+| [AI-Red-Lab](https://github.com/ranas-mukminov/AI-Red-Lab) | Local LLM red-teaming lab: 15-case catalogue, stub harness, local-model adapter | Lab, local stub / local models only |
+| [VulnLab-App](https://github.com/ranas-mukminov/VulnLab-App) | Intentionally vulnerable local app (SQLi, XSS, IDOR, SSRF, broken auth), 127.0.0.1 only | Lab, intentionally vulnerable — never expose |
+| [API-Red-Lab](https://github.com/ranas-mukminov/API-Red-Lab) | OWASP API lab with a localhost HTTP server (BOLA, broken auth, data exposure, rate limiting) | Lab, fictional data only |
+| [Cloud-IAM-Red-Lab](https://github.com/ranas-mukminov/Cloud-IAM-Red-Lab) | Simulated cloud IAM privilege-escalation lab (assumption chains, wildcard policies) | Lab, simulated data only, no real cloud |
+| [Disclosure-Portfolio](https://github.com/ranas-mukminov/Disclosure-Portfolio) | Responsible-disclosure templates and lab-only sample write-ups | Format / lab samples only, no real CVE claimed |
+
+Existing flagships, for reference: Kube-Simple-Audit, Secure-K3s-GitOps-Template, AutoHarden-Toolkit, Cloud-IAM-Optimizer, and ssh-harden are defensive hardening and audit tools (see their own repositories for their current status). KubeGuardian-Core is a demonstration stub, not a production runtime — see its own README.
+
+
 ## Features
 - 🔍 Multi-cloud security auditing (AWS, GCP, Azure)
 - 🛡️ Kubernetes runtime threat detection
