@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          python -m pytest tests/terraform/graph/runner/test_counted_kubernetes_image_bystander.py -vv -q > /tmp/checkov-regression.txt 2>&1
+          python -m pytest -o addopts= tests/terraform/graph/runner/test_counted_kubernetes_image_bystander.py -vv -q > /tmp/checkov-regression.txt 2>&1
           code=$?
           set -e
           cat /tmp/checkov-regression.txt
