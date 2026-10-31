@@ -21,7 +21,7 @@ jobs:
             ref: e6ba6072e48c8d3382931f89ccf0968703e7f499
             should_pass: "false"
           - phase: after
-            ref: 8a88e6837f628d809ed45d013b1766a546e99b24
+            ref: a5b132c6eb6377da1ff6066533a36d205769426f
             should_pass: "true"
     name: regression ${{ matrix.phase }}
     steps:
@@ -87,3 +87,8 @@ jobs:
             fi
           fi
           echo "Validated expected ${EXPECT_PASS} result; pytest code was $code"
+      - name: Run existing Terraform graph regressions
+        if: matrix.phase == 'after'
+        working-directory: checkov
+        run: |
+          python -m pytest -o addopts= tests/terraform/graph/graph_builder/test_local_graph.py tests/terraform/graph/runner/test_runner.py -q
