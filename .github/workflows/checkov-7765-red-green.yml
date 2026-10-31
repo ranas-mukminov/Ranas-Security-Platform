@@ -21,7 +21,7 @@ jobs:
             ref: e6ba6072e48c8d3382931f89ccf0968703e7f499
             should_pass: "false"
           - phase: after
-            ref: f8711e6e14fdaf149efbc8446e336f6758f0b0a9
+            ref: b67a4ce2cc9aab4e0b24fc065479ca13b54bdd43
             should_pass: "true"
     name: regression ${{ matrix.phase }}
     steps:
@@ -30,6 +30,30 @@ jobs:
           repository: ranas-mukminov/checkov
           ref: ${{ matrix.ref }}
           path: checkov
+      - name: Normalize synthetic HCL for pre-fix checkout
+        if: matrix.phase == 'before'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path("checkov/tests/terraform/graph/resources/counted_kubernetes_image_bystander/observability.tf")
+          s = p.read_text()
+          old = '''          liveness_probe { http_get { path = "/metrics" port = 9121 } }
+          readiness_probe { http_get { path = "/metrics" port = 9121 } }'''
+          fixed = '''          liveness_probe {
+            http_get {
+              path = "/metrics"
+              port = 9121
+            }
+          }
+          readiness_probe {
+            http_get {
+              path = "/metrics"
+              port = 9121
+            }
+          }'''
+          assert old in s
+          p.write_text(s.replace(old, fixed))
+          PY
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
