@@ -21,7 +21,7 @@ jobs:
             ref: e6ba6072e48c8d3382931f89ccf0968703e7f499
             should_pass: "false"
           - phase: after
-            ref: b67a4ce2cc9aab4e0b24fc065479ca13b54bdd43
+            ref: 8a88e6837f628d809ed45d013b1766a546e99b24
             should_pass: "true"
     name: regression ${{ matrix.phase }}
     steps:
