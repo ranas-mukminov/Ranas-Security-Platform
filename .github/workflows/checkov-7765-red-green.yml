@@ -39,11 +39,11 @@ jobs:
           s = p.read_text()
           for name in ("liveness_probe", "readiness_probe"):
               old = f'{name} {{ http_get {{ path = "/metrics" port = 9121 }} }}'
-              fixed = (f'{name} {{\\n'
-                       '            http_get {\\n'
-                       '              path = "/metrics"\\n'
-                       '              port = 9121\\n'
-                       '            }\\n'
+              fixed = (f'{name} {{\n'
+                       '            http_get {\n'
+                       '              path = "/metrics"\n'
+                       '              port = 9121\n'
+                       '            }\n'
                        '          }')
               assert old in s, name
               s = s.replace(old, fixed)
