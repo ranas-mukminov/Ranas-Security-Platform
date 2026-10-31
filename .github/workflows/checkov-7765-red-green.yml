@@ -1,0 +1,70 @@
+name: Validate Checkov #7765 before and after fix
+
+on:
+  push:
+    branches:
+      - ci/checkov-7765-red-green-20261031
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 28
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - phase: before
+            ref: e6ba6072e48c8d3382931f89ccf0968703e7f499
+            should_pass: "false"
+          - phase: after
+            ref: f8711e6e14fdaf149efbc8446e336f6758f0b0a9
+            should_pass: "true"
+    name: regression ${{ matrix.phase }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: ranas-mukminov/checkov
+          ref: ${{ matrix.ref }}
+          path: checkov
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install project and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ./checkov pytest networkx rustworkx
+      - name: Run synthetic Terraform graph regression
+        working-directory: checkov
+        env:
+          EXPECT_PASS: ${{ matrix.should_pass }}
+        shell: bash
+        run: |
+          set +e
+          python -m pytest tests/terraform/graph/runner/test_counted_kubernetes_image_bystander.py -vv -q > /tmp/checkov-regression.txt 2>&1
+          code=$?
+          set -e
+          cat /tmp/checkov-regression.txt
+          if [ "$EXPECT_PASS" = "true" ]; then
+            if [ "$code" -ne 0 ]; then
+              echo "Patched revision failed regression" >&2
+              exit "$code"
+            fi
+          else
+            if [ "$code" -eq 0 ]; then
+              echo "Unpatched revision unexpectedly passed; no regression evidence" >&2
+              exit 1
+            fi
+            if ! grep -Fq "CKV_K8S_" /tmp/checkov-regression.txt; then
+              echo "Baseline failed for an unrelated reason, not the image regression" >&2
+              exit 1
+            fi
+            if ! grep -Fq "kubernetes_deployment_v1.target[0]" /tmp/checkov-regression.txt; then
+              echo "Baseline failure did not identify the affected resource" >&2
+              exit 1
+            fi
+          fi
+          echo "Validated expected ${EXPECT_PASS} result; pytest code was $code"
