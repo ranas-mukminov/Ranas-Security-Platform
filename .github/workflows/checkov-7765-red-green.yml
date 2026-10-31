@@ -37,22 +37,17 @@ jobs:
           from pathlib import Path
           p = Path("checkov/tests/terraform/graph/resources/counted_kubernetes_image_bystander/observability.tf")
           s = p.read_text()
-          old = '''          liveness_probe { http_get { path = "/metrics" port = 9121 } }
-          readiness_probe { http_get { path = "/metrics" port = 9121 } }'''
-          fixed = '''          liveness_probe {
-            http_get {
-              path = "/metrics"
-              port = 9121
-            }
-          }
-          readiness_probe {
-            http_get {
-              path = "/metrics"
-              port = 9121
-            }
-          }'''
-          assert old in s
-          p.write_text(s.replace(old, fixed))
+          for name in ("liveness_probe", "readiness_probe"):
+              old = f'{name} {{ http_get {{ path = "/metrics" port = 9121 }} }}'
+              fixed = (f'{name} {{\\n'
+                       '            http_get {\\n'
+                       '              path = "/metrics"\\n'
+                       '              port = 9121\\n'
+                       '            }\\n'
+                       '          }')
+              assert old in s, name
+              s = s.replace(old, fixed)
+          p.write_text(s)
           PY
       - uses: actions/setup-python@v5
         with:
