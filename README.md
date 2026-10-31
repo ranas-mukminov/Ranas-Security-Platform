@@ -74,6 +74,16 @@ or a production runtime.
 Existing flagships, for reference: Kube-Simple-Audit, Secure-K3s-GitOps-Template, AutoHarden-Toolkit, Cloud-IAM-Optimizer, and ssh-harden are defensive hardening and audit tools (see their own repositories for their current status). KubeGuardian-Core is a demonstration stub, not a production runtime — see its own README.
 
 
+## Flagship hardening and audit tools
+
+| Repository | What it is | Status |
+|------------|------------|--------|
+| [Kube-Simple-Audit](https://github.com/ranas-mukminov/Kube-Simple-Audit) | Lightweight, read-only Bash Kubernetes audit helper with a Markdown report | Audit helper, CI passing |
+| [Secure-K3s-GitOps-Template](https://github.com/ranas-mukminov/Secure-K3s-GitOps-Template) | Secure-by-default K3s GitOps template (ArgoCD, Cloudflare Tunnel) | Template, no CI workflow yet |
+| [AutoHarden-Toolkit](https://github.com/ranas-mukminov/AutoHarden-Toolkit) | Linux hardening CLI, dry-run by default, v0.2.0 released | CLI, no CI workflow yet |
+| [Cloud-IAM-Optimizer](https://github.com/ranas-mukminov/Cloud-IAM-Optimizer) | AWS IAM least-privilege auditor, mocked tests | Audit tool, AWS only, CI passing |
+| [ssh-harden](https://github.com/ranas-mukminov/ssh-harden) | SSH hardening helper with audit/apply modes and a lockout guard, v0.1.0 released | Helper, no CI workflow yet |
+
 ## Features
 - 🔍 Multi-cloud security auditing (AWS, GCP, Azure)
 - 🛡️ Kubernetes runtime threat detection
